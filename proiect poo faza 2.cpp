@@ -140,7 +140,69 @@ public:
 		}
 		cout << endl;
 	}
+
+	Tigaie operator=(const Tigaie& t) {
+		if (this != &t) {
+			this->producator = t.producator;
+			this->greutate = t.greutate;
+			this->nrMateriale = t.nrMateriale;
+			if (this->material != NULL) {
+				delete[]this->material;
+			}
+			this->material = new string[t.nrMateriale];
+			for (int i = 0; i < t.nrMateriale; i++) {
+				this->material[i] = t.material[i];
+			}
+			this->esteCeramica = t.esteCeramica;
+		}
+		return *this;
+	}
+
+	Tigaie operator+(int val) {
+		Tigaie aux = *this;
+		aux.greutate = this->greutate + val;
+		return aux;
+	}
+	friend istream& operator>>(istream& tastatura, Tigaie& t);
 };
+
+ostream& operator<<(ostream& monitor, Tigaie t) {
+	monitor << "Tigaia cu id-ul " << t.getNrInventar() << ", produsa de " << t.getProducator() << ", are " << t.getGreutate() << " kg.";
+	if (t.getNrMateriale() != 0) {
+		monitor << "Aceasta este fabricata din " << t.getNrMateriale() << " materiale, si anume: ";
+		for (int i = 0; i < t.getNrMateriale(); i++) monitor << t.getMaterial(i) << ", ";
+		monitor << ".";
+	}
+	if (t.getEsteCeramica() == true) {
+		monitor << " Tigaia este din ceramica.";
+	}
+	else {
+		monitor << " Tigaia nu este din ceramica.";
+	}
+	return monitor;
+}
+
+istream& operator>>(istream& tastatura, Tigaie& t) {
+	cout << "Producator: ";
+	tastatura >> t.producator;
+	cout << endl << "Greutate: ";
+	tastatura >> t.greutate;
+	cout << endl << "Nr. materiale: ";
+	tastatura >> t.nrMateriale;
+	if (t.material != NULL) {
+		delete[]t.material;
+	}
+	t.material = new string[t.nrMateriale];
+	if (t.nrMateriale > 0) {
+		for (int i = 0; i < t.nrMateriale; i++) {
+			cout << endl << "Material " << i+1 << ": ";
+			tastatura >> t.material[i];
+		}
+	}
+	cout << endl << "Este ceramica? ";
+	tastatura >> t.esteCeramica;
+	return tastatura;
+}
 
 int Tigaie::nrGenerator = 1000;
 
@@ -278,9 +340,46 @@ public:
 		}
 		cout << endl;
 	}
+
+	Cuptor operator=(const Cuptor& c) {
+		if (this != &c) {
+			this->culoare = c.culoare;
+			this->esteSmart = c.esteSmart;
+			this->nrPrograme = c.nrPrograme;
+			if (this->numeProgram != NULL) {
+				delete[]this->numeProgram;
+			}
+			this->numeProgram = new string[c.nrPrograme];
+			for (int i = 0; i < c.nrPrograme; i++) {
+				this->numeProgram[i] = c.numeProgram[i];
+			}
+		}
+		return *this;
+	}
+
+	bool operator>(const Cuptor& c) {
+		return this->nrPrograme > c.nrPrograme;
+	}
+
+	bool operator<=(const Cuptor& c) {
+		return this->nrPrograme <= c.nrPrograme;
+	}
+
 	friend void esteAlb(Cuptor cuptor);
 	friend void acelasiProducator(Cuptor& cuptor, Tigaie& tigaie);
 };
+
+ostream& operator<<(ostream& monitor, Cuptor& c) {
+	monitor << "Cuptorul cu id-ul " << c.getNrCuptor() << ", cu producatorul " << c.getProducator() << " este culoarea " << c.getCuloare() << ".";
+	if (c.getEsteSmart() != false) {
+		monitor << " Cuptorul are " << c.getNrPrograme() << " programe smart, si anume: ";
+		for (int i = 0; i < c.getNrPrograme(); i++) {
+			monitor << c.getNumeProgram(i) << ", ";
+		}
+	}
+	monitor << endl;
+	return monitor;
+}
 
 void esteAlb(Cuptor cuptor) {
 	if (cuptor.culoare == "alb") {
@@ -397,7 +496,61 @@ public:
 		}
 		cout << endl;
 	}
+
+	SetTacamuri operator=(const SetTacamuri& s) {
+		if (this != &s) {
+			this->material = s.material;
+			this->nrComponente = s.nrComponente;
+			if (this->componenta != NULL) {
+				delete[]this->componenta;
+			}
+			this->componenta = new string[s.nrComponente];
+			for (int i = 0; i < s.nrComponente; i++) {
+				this->componenta[i] = s.componenta[i];
+			}
+		}
+		return *this;
+	}
+	friend istream& operator>>(istream& tastatura, SetTacamuri& s);
+
+	SetTacamuri operator-(int val) {
+		SetTacamuri aux = *this;
+		if (this->nrComponente > val) {
+			aux.nrComponente = this->nrComponente - val;
+		}
+		else {
+			aux.nrComponente = 0;
+		}
+		return aux;
+	}
 };
+
+istream& operator>>(istream& tastatura, SetTacamuri& s) {
+	cout << endl << "Material: ";
+	tastatura >> s.material;
+	cout << endl << "Numar componente: ";
+	tastatura >> s.nrComponente;
+	if (s.componenta != NULL) {
+		delete[]s.componenta;
+	}
+	s.componenta = new string[s.nrComponente];
+	if (s.nrComponente > 0) {
+		for (int i = 0; i < s.nrComponente; i++) {
+			cout << endl << "Componenta " << i + 1 << ": ";
+			tastatura >> s.componenta[i];
+		}
+	}
+	return tastatura;
+}
+
+ostream& operator<<(ostream& monitor, SetTacamuri& s) {
+	monitor << "Setul de tacamuri cu id-ul " << s.getNrSet() << " este fabricat din " << s.getMaterial() << ". Acesta este alcatuit din " << s.getNrComponente()<< " tacamuri, adica ";
+	for (int i = 0; i < s.getNrComponente(); i++) {
+		monitor << s.getComponenta(i) << ", ";
+	}
+	monitor << endl;
+	return monitor;
+}
 
 void acelasiProducator(Cuptor& cuptor, Tigaie& tigaie) {
 	if (cuptor.producator == tigaie.getProducator()) cout << "Cele doua au acelasi producator!";
@@ -411,13 +564,13 @@ void main()
 	//pentru Tigaie
 
 	Tigaie tigaie1;
-	tigaie1.afisareTigaie();
+	cout << tigaie1<<endl;
 
 	string producator2 = "Tefal";
 	float greutate2 = 1.95;
 
 	Tigaie tigaie2(producator2, greutate2);
-	tigaie2.afisareTigaie();
+	cout << tigaie2 << endl;
 
 	string producator3 = "Electrolux";
 	float greutate3 = 1.13;
@@ -429,7 +582,13 @@ void main()
 	bool esteCeramica3 = true;
 
 	Tigaie tigaie3(producator3, greutate3, nrMateriale3, material3, esteCeramica3);
-	tigaie3.afisareTigaie();
+	cout << tigaie3 << endl;
+
+	cout << endl;
+
+	Tigaie tigaie4;
+	cin >> tigaie4;
+	cout << tigaie4;
 
 	cout << endl;
 
@@ -460,8 +619,19 @@ void main()
 	adaugNumePrograme[0] = "pui";
 	adaugNumePrograme[1] = "cartofi";
 
-	acelasiProducator(cuptor2, tigaie3);
 	cout << endl;
+
+	if (cuptor1 > cuptor3) {
+		cout << "Cuptorul 1 are mai multe programe.";
+	}
+	else {
+		cout << "Cuptorul 2 are mai multe programe.";
+	}
+
+	cout << endl;
+
+	acelasiProducator(cuptor2, tigaie3);
+	
 
 	esteAlb(cuptor3);
 
@@ -489,5 +659,8 @@ void main()
 
 	cout << "Setul de tacamuri cu id-ul " << set3.getNrSet() << " este fabricat din " << set3.getMaterial() << ". Acesta este alcatuit din " << set3.getNrComponente() << " tacamuri.";
 	cout << endl;
+
+	SetTacamuri aux = set3 - 2;
+	cout << aux;
 }
 

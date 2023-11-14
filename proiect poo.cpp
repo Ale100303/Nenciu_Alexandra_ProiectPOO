@@ -367,6 +367,7 @@ public:
 
 	friend void esteAlb(Cuptor cuptor);
 	friend void acelasiProducator(Cuptor& cuptor, Tigaie& tigaie);
+	friend istream& operator>>(istream& tastatura, Cuptor& c);
 };
 
 ostream& operator<<(ostream& monitor, Cuptor& c) {
@@ -379,6 +380,36 @@ ostream& operator<<(ostream& monitor, Cuptor& c) {
 	}
 	monitor << endl;
 	return monitor;
+}
+
+istream& operator>>(istream& tastatura, Cuptor& c) {
+	cout<< "Producator: ";
+	tastatura >> c.producator;
+	cout<< "Culoare: ";
+	tastatura >> c.culoare;
+	cout<< "Este smart? ";
+	tastatura >> c.esteSmart;
+	if(c.esteSmart == 1){
+		cout<< "Nr. programe: ";
+		tastatura >> c.nrPrograme;
+		if(c.numeProgram!=NULL){
+			delete[]c.numeProgram;
+		}
+		c.numeProgram = new string[c.nrPrograme];
+		for(int i=0;i<c.nrPrograme;i++){
+			cout<<"Program "<<i+1<<": ";
+			tastatura>>c.numeProgram[i];
+			cout<<endl;
+		}
+	}
+	else {
+		c.nrPrograme = 0;
+		if(c.numeProgram!=NULL){
+			delete[]c.numeProgram;
+		}
+		c.numeProgram = NULL;
+	}
+	return tastatura;
 }
 
 void esteAlb(Cuptor cuptor) {
@@ -559,7 +590,7 @@ void acelasiProducator(Cuptor& cuptor, Tigaie& tigaie) {
 
 int SetTacamuri::nrGenerator = 3000;
 
-void main()
+int main()
 {
 	//pentru Tigaie
 
@@ -591,6 +622,19 @@ void main()
 	cout << tigaie4;
 
 	cout << endl;
+
+	int nrTigai = 0;
+	cout << "Nr. obiecte vector Tigai = ";
+	cin >> nrTigai;
+	Tigaie* vectorTigai = new Tigaie[nrTigai];
+
+	for(int i = 0; i<nrTigai; i++){
+		cin >> vectorTigai[i];
+	}
+
+	for(int i = 0; i<nrTigai; i++){
+		cout << vectorTigai[i]<<endl;
+	}
 
 	//pentru Cuptor
 
@@ -637,6 +681,19 @@ void main()
 
 	cout << endl;
 
+	int nrCuptoare = 0;
+	cout<<"Nr. cuptoare in vector: ";
+	cin>>nrCuptoare;
+	Cuptor* vectorCuptoare = new Cuptor[nrCuptoare];
+	for(int i=0;i<nrCuptoare;i++){
+		cout<<"Cuptor "<<i+1<<endl;
+		cin>>vectorCuptoare[i];
+	}
+	for(int i=0;i<nrCuptoare;i++){
+		cout<<"Cuptor "<<i+1<<":"<<endl;
+		cout<<vectorCuptoare[i]<<endl;
+	}
+
 	//pentru SetTacamuri
 
 	SetTacamuri set1;
@@ -662,5 +719,20 @@ void main()
 
 	SetTacamuri aux = set3 - 2;
 	cout << aux;
-}
 
+	int nrTacamuri = 0;
+	cout << "Nr. seturi tacamuri: ";
+	cin >> nrTacamuri;
+	SetTacamuri* vectorSet = new SetTacamuri[nrTacamuri];
+
+	for(int i=0;i<nrTacamuri;i++){
+		cout<< "Setul "<<i+1<<endl;
+		cin>>vectorSet[i];
+	} 
+
+	for(int i=0;i<nrTacamuri;i++){
+		cout<<vectorSet[i]<<endl;
+	}
+
+	return 0;
+}

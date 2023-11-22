@@ -14,7 +14,7 @@ private:
 	bool esteCeramica;
 
 public:
-	
+
 	static int getNrGenerator() {
 		return nrGenerator;
 	}
@@ -42,7 +42,7 @@ public:
 	string getMaterial(int i) {
 		if (i >= 0 && i < nrMateriale)
 		{
-		return material[i];
+			return material[i];
 		}
 	}
 
@@ -82,14 +82,14 @@ public:
 	}
 
 	Tigaie(const Tigaie& t) : nrInventar(nrGenerator++) {
-			this->producator = t.producator;
-			this->greutate = t.greutate;
-			this->nrMateriale = t.nrMateriale;
-			this->material = new string[t.nrMateriale];
-			for (int i = 0; i < t.nrMateriale; i++) {
-				this->material[i] = t.material[i];
-			}
-			this->esteCeramica = t.esteCeramica;
+		this->producator = t.producator;
+		this->greutate = t.greutate;
+		this->nrMateriale = t.nrMateriale;
+		this->material = new string[t.nrMateriale];
+		for (int i = 0; i < t.nrMateriale; i++) {
+			this->material[i] = t.material[i];
+		}
+		this->esteCeramica = t.esteCeramica;
 	}
 
 	Tigaie() : nrInventar(nrGenerator++) {
@@ -195,7 +195,7 @@ istream& operator>>(istream& tastatura, Tigaie& t) {
 	t.material = new string[t.nrMateriale];
 	if (t.nrMateriale > 0) {
 		for (int i = 0; i < t.nrMateriale; i++) {
-			cout << endl << "Material " << i+1 << ": ";
+			cout << endl << "Material " << i + 1 << ": ";
 			tastatura >> t.material[i];
 		}
 	}
@@ -343,6 +343,7 @@ public:
 
 	Cuptor operator=(const Cuptor& c) {
 		if (this != &c) {
+			this->producator = c.producator;
 			this->culoare = c.culoare;
 			this->esteSmart = c.esteSmart;
 			this->nrPrograme = c.nrPrograme;
@@ -383,28 +384,28 @@ ostream& operator<<(ostream& monitor, Cuptor& c) {
 }
 
 istream& operator>>(istream& tastatura, Cuptor& c) {
-	cout<< "Producator: ";
+	cout << "Producator: ";
 	tastatura >> c.producator;
-	cout<< "Culoare: ";
+	cout << "Culoare: ";
 	tastatura >> c.culoare;
-	cout<< "Este smart? ";
+	cout << "Este smart? ";
 	tastatura >> c.esteSmart;
-	if(c.esteSmart == 1){
-		cout<< "Nr. programe: ";
+	if (c.esteSmart == 1) {
+		cout << "Nr. programe: ";
 		tastatura >> c.nrPrograme;
-		if(c.numeProgram!=NULL){
+		if (c.numeProgram != NULL) {
 			delete[]c.numeProgram;
 		}
 		c.numeProgram = new string[c.nrPrograme];
-		for(int i=0;i<c.nrPrograme;i++){
-			cout<<"Program "<<i+1<<": ";
-			tastatura>>c.numeProgram[i];
-			cout<<endl;
+		for (int i = 0; i < c.nrPrograme; i++) {
+			cout << "Program " << i + 1 << ": ";
+			tastatura >> c.numeProgram[i];
+			cout << endl;
 		}
 	}
 	else {
 		c.nrPrograme = 0;
-		if(c.numeProgram!=NULL){
+		if (c.numeProgram != NULL) {
 			delete[]c.numeProgram;
 		}
 		c.numeProgram = NULL;
@@ -575,7 +576,7 @@ istream& operator>>(istream& tastatura, SetTacamuri& s) {
 }
 
 ostream& operator<<(ostream& monitor, SetTacamuri& s) {
-	monitor << "Setul de tacamuri cu id-ul " << s.getNrSet() << " este fabricat din " << s.getMaterial() << ". Acesta este alcatuit din " << s.getNrComponente()<< " tacamuri, adica ";
+	monitor << "Setul de tacamuri cu id-ul " << s.getNrSet() << " este fabricat din " << s.getMaterial() << ". Acesta este alcatuit din " << s.getNrComponente() << " tacamuri, adica ";
 	for (int i = 0; i < s.getNrComponente(); i++) {
 		monitor << s.getComponenta(i) << ", ";
 	}
@@ -590,12 +591,78 @@ void acelasiProducator(Cuptor& cuptor, Tigaie& tigaie) {
 
 int SetTacamuri::nrGenerator = 3000;
 
-int main()
+class Bucatarie {
+private:
+	float suprafata;
+	float pret;
+	Cuptor cuptor;
+
+public:
+	Bucatarie() : suprafata(100), pret(1599.99), cuptor() {
+	}
+
+	float getSuprafata() {
+		return suprafata;
+	}
+
+	float getPret() {
+		return pret;
+	}
+
+	Cuptor getCuptor() {
+		return cuptor;
+	}
+
+	void setSuprafata(float suprafata) {
+		this->suprafata = suprafata;
+	}
+
+
+	void setPret(float pret) {
+		this->pret = pret;
+	}
+
+	void setCuptor(Cuptor& c) {
+		this->cuptor = c;
+	}
+
+	friend class Cuptor;
+	friend ostream& operator<<(ostream& monitor, Bucatarie& b);
+	friend istream& operator>>(istream& tastatura, Bucatarie& b);
+
+	Bucatarie operator=(Bucatarie& b) {
+		this->suprafata = b.suprafata;
+		this->pret = b.pret;
+		this->cuptor = b.cuptor;
+
+		return *this;
+	}
+};
+
+ostream& operator<<(ostream& monitor, Bucatarie& b) {
+	monitor << "Bucataria are suprafata " << b.suprafata << " si costa " << b.pret << " lei. Despre cuptorul din bucatarie se cunosc urmatoarele informatii: " << b.cuptor;
+	return monitor;
+}
+
+istream& operator>>(istream& tastatura, Bucatarie& b) {
+	cout << "DATE GENERALE BUCATARIE" << endl;
+	cout << "Suprafata: ";
+	tastatura >> b.suprafata;
+	cout << "Pret: ";
+	tastatura >> b.pret;
+	cout << "DATE CUPTOR" << endl;
+	tastatura >> b.cuptor;
+
+	return tastatura;
+}
+
+
+void main()
 {
 	//pentru Tigaie
 
-	Tigaie tigaie1;
-	cout << tigaie1<<endl;
+	/*Tigaie tigaie1;
+	cout << tigaie1 << endl;
 
 	string producator2 = "Tefal";
 	float greutate2 = 1.95;
@@ -628,111 +695,127 @@ int main()
 	cin >> nrTigai;
 	Tigaie* vectorTigai = new Tigaie[nrTigai];
 
-	for(int i = 0; i<nrTigai; i++){
+	for (int i = 0; i < nrTigai; i++) {
 		cin >> vectorTigai[i];
 	}
 
-	for(int i = 0; i<nrTigai; i++){
-		cout << vectorTigai[i]<<endl;
-	}
+	for (int i = 0; i < nrTigai; i++) {
+		cout << vectorTigai[i] << endl;
+	}*/
 
 	//pentru Cuptor
 
-	Cuptor cuptor1;
-	cuptor1.afisareCuptor();
+	//Cuptor cuptor1;
+	//cuptor1.afisareCuptor();
 
-	string producatorcuptor2 = "Electrolux";
-	string culoare2 = "negru";
+	//string producatorcuptor2 = "Electrolux";
+	//string culoare2 = "negru";
 
-	Cuptor cuptor2(producatorcuptor2, culoare2);
-	cuptor2.afisareCuptor();
+	//Cuptor cuptor2(producatorcuptor2, culoare2);
+	//cuptor2.afisareCuptor();
 
-	string producatorcuptor3 = "Samsung";
-	string culoare3 = "alb";
-	bool esteSmart3 = true;
-	int nrPrograme3 = 2;
-	string* numeProgram3 = new string[nrPrograme3];
-	numeProgram3[0] = "defrost";
-	numeProgram3[1] = "pizza";
+	//string producatorcuptor3 = "Samsung";
+	//string culoare3 = "alb";
+	//bool esteSmart3 = true;
+	//int nrPrograme3 = 2;
+	//string* numeProgram3 = new string[nrPrograme3];
+	//numeProgram3[0] = "defrost";
+	//numeProgram3[1] = "pizza";
 
-	Cuptor cuptor3(producatorcuptor3, culoare3, esteSmart3, nrPrograme3, numeProgram3);
-	cuptor3.afisareCuptor();
+	//Cuptor cuptor3(producatorcuptor3, culoare3, esteSmart3, nrPrograme3, numeProgram3);
+	//cuptor3.afisareCuptor();
 
-	int adaugPrograme = 2;
-	string* adaugNumePrograme = new string[adaugPrograme];
-	adaugNumePrograme[0] = "pui";
-	adaugNumePrograme[1] = "cartofi";
+	//int adaugPrograme = 2;
+	//string* adaugNumePrograme = new string[adaugPrograme];
+	//adaugNumePrograme[0] = "pui";
+	//adaugNumePrograme[1] = "cartofi";
 
-	cout << endl;
+	//cout << endl;
 
-	if (cuptor1 > cuptor3) {
-		cout << "Cuptorul 1 are mai multe programe.";
-	}
-	else {
-		cout << "Cuptorul 2 are mai multe programe.";
-	}
+	//if (cuptor1 > cuptor3) {
+	//	cout << "Cuptorul 1 are mai multe programe.";
+	//}
+	//else {
+	//	cout << "Cuptorul 2 are mai multe programe.";
+	//}
 
-	cout << endl;
+	//cout << endl;
 
-	acelasiProducator(cuptor2, tigaie3);
-	
+	//acelasiProducator(cuptor2, tigaie3);
 
-	esteAlb(cuptor3);
 
-	cout << endl;
+	//esteAlb(cuptor3);
 
-	int nrCuptoare = 0;
-	cout<<"Nr. cuptoare in vector: ";
-	cin>>nrCuptoare;
-	Cuptor* vectorCuptoare = new Cuptor[nrCuptoare];
-	for(int i=0;i<nrCuptoare;i++){
-		cout<<"Cuptor "<<i+1<<endl;
-		cin>>vectorCuptoare[i];
-	}
-	for(int i=0;i<nrCuptoare;i++){
-		cout<<"Cuptor "<<i+1<<":"<<endl;
-		cout<<vectorCuptoare[i]<<endl;
-	}
+	//cout << endl;
 
-	//pentru SetTacamuri
+	//int nrCuptoare = 0;
+	//cout << "Nr. cuptoare in vector: ";
+	//cin >> nrCuptoare;
+	//Cuptor* vectorCuptoare = new Cuptor[nrCuptoare];
+	//for (int i = 0; i < nrCuptoare; i++) {
+	//	cout << "Cuptor " << i + 1 << endl;
+	//	cin >> vectorCuptoare[i];
+	//}
+	//for (int i = 0; i < nrCuptoare; i++) {
+	//	cout << "Cuptor " << i + 1 << ":" << endl;
+	//	cout << vectorCuptoare[i] << endl;
+	//}
 
-	SetTacamuri set1;
-	set1.afisareSetTacamuri();
+	////pentru SetTacamuri
 
-	string materialTacamuri2 = "argint";
-	SetTacamuri set2(materialTacamuri2);
-	set2.afisareSetTacamuri();
+	//SetTacamuri set1;
+	//set1.afisareSetTacamuri();
 
-	string materialTacamuri3 = "argint";
-	int nrComponente = 4;
-	string* componenta = new string[nrComponente];
-	componenta[0] = "lingura";
-	componenta[1] = "furculita";
-	componenta[2] = "cutit";
-	componenta[3] = "lingurita desert";
+	//string materialTacamuri2 = "argint";
+	//SetTacamuri set2(materialTacamuri2);
+	//set2.afisareSetTacamuri();
 
-	SetTacamuri set3(materialTacamuri3, nrComponente, componenta);
-	set3.afisareSetTacamuri();
+	//string materialTacamuri3 = "argint";
+	//int nrComponente = 4;
+	//string* componenta = new string[nrComponente];
+	//componenta[0] = "lingura";
+	//componenta[1] = "furculita";
+	//componenta[2] = "cutit";
+	//componenta[3] = "lingurita desert";
 
-	cout << "Setul de tacamuri cu id-ul " << set3.getNrSet() << " este fabricat din " << set3.getMaterial() << ". Acesta este alcatuit din " << set3.getNrComponente() << " tacamuri.";
-	cout << endl;
+	//SetTacamuri set3(materialTacamuri3, nrComponente, componenta);
+	//set3.afisareSetTacamuri();
 
-	SetTacamuri aux = set3 - 2;
-	cout << aux;
+	//cout << "Setul de tacamuri cu id-ul " << set3.getNrSet() << " este fabricat din " << set3.getMaterial() << ". Acesta este alcatuit din " << set3.getNrComponente() << " tacamuri.";
+	//cout << endl;
 
-	int nrTacamuri = 0;
-	cout << "Nr. seturi tacamuri: ";
-	cin >> nrTacamuri;
-	SetTacamuri* vectorSet = new SetTacamuri[nrTacamuri];
+	//SetTacamuri aux = set3 - 2;
+	//cout << aux;
 
-	for(int i=0;i<nrTacamuri;i++){
-		cout<< "Setul "<<i+1<<endl;
-		cin>>vectorSet[i];
-	} 
+	//int nrTacamuri = 0;
+	//cout << "Nr. seturi tacamuri: ";
+	//cin >> nrTacamuri;
+	//SetTacamuri* vectorSet = new SetTacamuri[nrTacamuri];
 
-	for(int i=0;i<nrTacamuri;i++){
-		cout<<vectorSet[i]<<endl;
-	}
+	//for (int i = 0; i < nrTacamuri; i++) {
+	//	cout << "Setul " << i + 1 << endl;
+	//	cin >> vectorSet[i];
+	//}
 
-	return 0;
+	//for (int i = 0; i < nrTacamuri; i++) {
+	//	cout << vectorSet[i] << endl;
+	//}
+
+Bucatarie bucatarie;
+cout << bucatarie;
+
+Cuptor cuptorBuc("Tefal", "alb");
+
+cout << cuptorBuc;
+bucatarie.setCuptor(cuptorBuc);
+cout << bucatarie;
+
+cin >> bucatarie;
+cout << bucatarie;
+
+Bucatarie bucatarie1;
+
+bucatarie = bucatarie1;
+
+cout << bucatarie;
 }

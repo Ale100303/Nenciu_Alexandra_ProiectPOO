@@ -1,6 +1,7 @@
 // Nenciu Alexandra - domeniul culiNAr
 
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 class Tigaie {
@@ -164,6 +165,8 @@ public:
 		return aux;
 	}
 	friend istream& operator>>(istream& tastatura, Tigaie& t);
+	friend ofstream& operator<<(ofstream& fisier, Tigaie t);
+	friend ifstream& operator>>(ifstream& fisier, Tigaie& t);
 };
 
 ostream& operator<<(ostream& monitor, Tigaie t) {
@@ -180,6 +183,22 @@ ostream& operator<<(ostream& monitor, Tigaie t) {
 		monitor << " Tigaia nu este din ceramica.";
 	}
 	return monitor;
+}
+
+ofstream& operator<<(ofstream& fisier, Tigaie t) {
+	fisier << t.getProducator() << endl << t.getGreutate() << endl;
+	fisier << t.getNrMateriale() << endl;
+	if (t.getNrMateriale() != 0) {
+		for (int i = 0; i < t.getNrMateriale(); i++) fisier << t.getMaterial(i)<<" ";
+	}
+	if (t.getEsteCeramica() == true) {
+		fisier << "1";
+	}
+	else {
+		fisier << "0";
+	}
+	fisier << endl;
+	return fisier;
 }
 
 istream& operator>>(istream& tastatura, Tigaie& t) {
@@ -202,6 +221,22 @@ istream& operator>>(istream& tastatura, Tigaie& t) {
 	cout << endl << "Este ceramica? ";
 	tastatura >> t.esteCeramica;
 	return tastatura;
+}
+
+ifstream& operator>>(ifstream& fisier, Tigaie& t) {;
+	fisier >> t.producator;
+	fisier >> t.greutate;
+	fisier >> t.nrMateriale;
+	if (t.material != NULL) {
+		delete[]t.material;
+	}
+	t.material = new string[t.nrMateriale];
+	for (int i = 0; i < t.nrMateriale; i++) {
+		fisier >> t.material[i];
+	}
+
+	fisier >> t.esteCeramica;
+	return fisier;
 }
 
 int Tigaie::nrGenerator = 1000;
@@ -358,6 +393,8 @@ public:
 		return *this;
 	}
 
+
+
 	bool operator>(const Cuptor& c) {
 		return this->nrPrograme > c.nrPrograme;
 	}
@@ -372,11 +409,11 @@ public:
 };
 
 ostream& operator<<(ostream& monitor, Cuptor& c) {
-	monitor << "Cuptorul cu id-ul " << c.getNrCuptor() << ", cu producatorul " << c.getProducator() << " este culoarea " << c.getCuloare() << ".";
+	monitor << c.getNrCuptor() << " " << c.getProducator() << " " << c.getCuloare();
 	if (c.getEsteSmart() != false) {
-		monitor << " Cuptorul are " << c.getNrPrograme() << " programe smart, si anume: ";
+		monitor << c.getNrPrograme()<<" ";
 		for (int i = 0; i < c.getNrPrograme(); i++) {
-			monitor << c.getNumeProgram(i) << ", ";
+			monitor << c.getNumeProgram(i) << " ";
 		}
 	}
 	monitor << endl;
@@ -555,6 +592,26 @@ public:
 		}
 		return aux;
 	}
+
+	void scrieInFisierBinar(fstream& f) {
+		f.write((char*)&this->material, sizeof(string));
+		f.write((char*)&this->nrComponente, sizeof(int));
+		if (this->nrComponente != 0) {
+			for (int i = 0; i < this->nrComponente; i++) {
+				f.write((char*)&this->componenta[i], sizeof(string));
+			}
+		}
+	}
+
+	void citesteDinFisierBinar(fstream& f) {
+		f.read((char*)&this->material, sizeof(string));
+		f.read((char*)&this->nrComponente, sizeof(int));
+		if (this->nrComponente != 0) {
+			for (int i = 0; i < this->nrComponente; i++) {
+				f.read((char*)&this->componenta[i], sizeof(string));
+			}
+		}
+	}
 };
 
 istream& operator>>(istream& tastatura, SetTacamuri& s) {
@@ -629,6 +686,8 @@ public:
 	friend class Cuptor;
 	friend ostream& operator<<(ostream& monitor, Bucatarie& b);
 	friend istream& operator>>(istream& tastatura, Bucatarie& b);
+	friend ofstream& operator<<(ofstream& fisier, Bucatarie& b);
+	friend ifstream& operator>>(ifstream& fisier, Bucatarie& b);
 
 	Bucatarie operator=(Bucatarie& b) {
 		this->suprafata = b.suprafata;
@@ -644,6 +703,11 @@ ostream& operator<<(ostream& monitor, Bucatarie& b) {
 	return monitor;
 }
 
+ofstream& operator<<(ofstream& fisier, Bucatarie& b) {
+	fisier << b.suprafata << " " << b.pret << " " << b.cuptor;
+	return fisier;
+}
+
 istream& operator>>(istream& tastatura, Bucatarie& b) {
 	cout << "DATE GENERALE BUCATARIE" << endl;
 	cout << "Suprafata: ";
@@ -654,6 +718,14 @@ istream& operator>>(istream& tastatura, Bucatarie& b) {
 	tastatura >> b.cuptor;
 
 	return tastatura;
+}
+
+ifstream& operator>>(ifstream& fisier, Bucatarie& b) {
+	fisier >> b.suprafata;
+	fisier >> b.pret;
+	fisier >> b.cuptor;
+
+	return fisier;
 }
 
 
@@ -801,21 +873,18 @@ void main()
 	//	cout << vectorSet[i] << endl;
 	//}
 
-Bucatarie bucatarie;
-cout << bucatarie;
+//SetTacamuri set;
+//cout << set;
+//fstream fisier("fisier.bin", ios::out | ios::binary);
+//set.scrieInFisierBinar(fisier);
+//
+//SetTacamuri set1("aur");
+//cout << set1;
+//fstream citeste("fisier.bin", ios::in | ios::binary);
+//set1.citesteDinFisierBinar(citeste);
+//cout << set1;
 
-Cuptor cuptorBuc("Tefal", "alb");
 
-cout << cuptorBuc;
-bucatarie.setCuptor(cuptorBuc);
-cout << bucatarie;
 
-cin >> bucatarie;
-cout << bucatarie;
-
-Bucatarie bucatarie1;
-
-bucatarie = bucatarie1;
-
-cout << bucatarie;
+	
 }

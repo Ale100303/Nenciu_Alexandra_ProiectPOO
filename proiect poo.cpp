@@ -728,6 +728,125 @@ ifstream& operator>>(ifstream& fisier, Bucatarie& b) {
 	return fisier;
 }
 
+class Wok : public Tigaie {
+private: 
+	string origine;
+	float diametru;
+public:
+	Wok() : Tigaie() {
+		this->origine = "China";
+		this->diametru = 25;
+	}
+
+	Wok(string origine) : Tigaie() {
+		this->origine = origine;
+		this->diametru = 25;
+	}
+
+	Wok(string origine, float diametru) : Tigaie() {
+		this->origine = origine;
+		this->diametru = diametru;
+	}
+
+	Wok(const Wok& w) : Tigaie(w) {
+		this->origine = w.origine;
+		this->diametru = w.diametru;
+	}
+
+	void setOrigine(string origine) {
+		this->origine = origine;
+	}
+
+	void setDiametru(float diametru) {
+		this->diametru = diametru;
+	}
+
+	string getOrigine() {
+		return origine;
+	}
+
+	float getDiametru() {
+		return diametru;
+	}
+	
+	friend ostream& operator<<(ostream& monitor, const Wok& w);
+	friend istream& operator>>(istream& tastatura, Wok& w);
+
+};
+
+ostream& operator<<(ostream& monitor, const Wok& w) {
+	monitor << (Tigaie)w;
+	monitor << "Wok-ul are ca tara de origine " << w.origine << " si are diametrul de " << w.diametru << " cm." << endl;
+	return monitor;
+}
+
+istream& operator>>(istream& tastatura, Wok& w) {
+	cout << "Origine: ";
+	tastatura >> w.origine;
+	cout << endl << "Diametru: ";
+	tastatura >> w.diametru;
+	return tastatura;
+}
+
+class AirFryer : public Cuptor {
+private:
+	float capacitate;
+	bool touchScreen;
+public:
+	AirFryer() : Cuptor() {
+		this->capacitate = 5;
+		this->touchScreen = false;
+	}
+
+	AirFryer(float capacitate) :Cuptor() {
+		this->capacitate = capacitate;
+		this->touchScreen = false;
+	}
+
+	AirFryer(float capacitate, bool touchScreen) {
+		this->capacitate = capacitate;
+		this->touchScreen = touchScreen;
+	}
+
+	void setCapacitate(float Capacitate) {
+		this->capacitate = capacitate;
+	}
+
+	void setTouchScreen(bool touchScreen) {
+		this->touchScreen = touchScreen;
+	}
+
+	float getCapacitate() {
+		return capacitate;
+	}
+
+	float getTouchScreen() {
+		return touchScreen;
+	}
+
+	friend ostream& operator<<(ostream& monitor, AirFryer& a);
+	friend istream& operator>>(istream& tastatura, AirFryer& a);
+};
+
+ostream& operator<<(ostream& monitor,  AirFryer& a) {
+	monitor << "AirFryer-ul are diametrul de " << a.capacitate << " si ";
+	if (a.touchScreen = true) {
+		monitor << "are touch-screen." << endl;
+	}
+	else {
+		monitor << "nu are touch-screen." << endl;
+	}
+	return monitor;
+}
+
+istream& operator>>(istream& tastatura, AirFryer& a) {
+	cout << "Capacitate: ";
+	tastatura >> a.capacitate;
+	cout << endl << "Are touch-screen? ";
+	tastatura >> a.touchScreen;
+	return tastatura;
+}
+
 
 void main()
 {
@@ -884,7 +1003,15 @@ void main()
 //set1.citesteDinFisierBinar(citeste);
 //cout << set1;
 
+Wok wok;
+cout << wok;
+cin >> wok;
+cout << wok;
 
+AirFryer airf;
+cout << airf;
+cin >> airf;
+cout << airf;
 
 	
 }

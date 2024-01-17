@@ -4,6 +4,24 @@
 #include <fstream>
 using namespace std;
 
+class Produs {
+	string nume;
+public:
+	virtual void descrieProdus() = 0;
+
+	Produs() {
+		this->nume = "Nume produs";
+	}
+	
+	string getNume() {
+		return nume;
+	}
+
+	void setNume(string nume) {
+		this->nume = nume;
+	}
+};
+
 class Tigaie {
 private:
 	static int nrGenerator;

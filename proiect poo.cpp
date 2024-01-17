@@ -22,7 +22,9 @@ public:
 	}
 };
 
-class Tigaie {
+
+
+class Tigaie :public Produs{
 private:
 	static int nrGenerator;
 	const int nrInventar;
@@ -100,7 +102,7 @@ public:
 		}
 	}
 
-	Tigaie(const Tigaie& t) : nrInventar(nrGenerator++) {
+	Tigaie(const Tigaie& t) : Produs(), nrInventar(nrGenerator++) {
 		this->producator = t.producator;
 		this->greutate = t.greutate;
 		this->nrMateriale = t.nrMateriale;
@@ -111,7 +113,7 @@ public:
 		this->esteCeramica = t.esteCeramica;
 	}
 
-	Tigaie() : nrInventar(nrGenerator++) {
+	Tigaie() : Produs(), nrInventar(nrGenerator++) {
 		this->producator = "Lodge";
 		this->greutate = 2.54;
 		this->nrMateriale = 0;
@@ -119,7 +121,7 @@ public:
 		this->esteCeramica = false;
 	}
 
-	Tigaie(string producator, float greutate) : nrInventar(nrGenerator++) {
+	Tigaie(string producator, float greutate) : Produs(), nrInventar(nrGenerator++) {
 		this->producator = producator;
 		this->greutate = greutate;
 		this->nrMateriale = 0;
@@ -127,7 +129,7 @@ public:
 		this->esteCeramica = false;
 	}
 
-	Tigaie(string producator, float greutate, int nrMateriale, string* material, bool esteCeramica) : nrInventar(nrGenerator++) {
+	Tigaie(string producator, float greutate, int nrMateriale, string* material, bool esteCeramica) : Produs(), nrInventar(nrGenerator++) {
 		this->producator = producator;
 		this->greutate = greutate;
 		this->nrMateriale = nrMateriale;
@@ -142,6 +144,10 @@ public:
 		if (this->material != NULL) {
 			delete[]this->material;
 		}
+	}
+
+	void descrieProdus() {
+		cout << "Tigaia este produsa de " << this->producator << " si are " << this->greutate << " g.";
 	}
 
 	void afisareTigaie() {
@@ -162,6 +168,7 @@ public:
 
 	Tigaie operator=(const Tigaie& t) {
 		if (this != &t) {
+			Produs::operator=(t);
 			this->producator = t.producator;
 			this->greutate = t.greutate;
 			this->nrMateriale = t.nrMateriale;
@@ -185,16 +192,17 @@ public:
 	friend istream& operator>>(istream& tastatura, Tigaie& t);
 	friend ofstream& operator<<(ofstream& fisier, Tigaie t);
 	friend ifstream& operator>>(ifstream& fisier, Tigaie& t);
+	friend ostream& operator<<(ostream& monitor, const Tigaie& t);
 };
 
-ostream& operator<<(ostream& monitor, Tigaie t) {
-	monitor << "Tigaia cu id-ul " << t.getNrInventar() << ", produsa de " << t.getProducator() << ", are " << t.getGreutate() << " kg.";
-	if (t.getNrMateriale() != 0) {
-		monitor << "Aceasta este fabricata din " << t.getNrMateriale() << " materiale, si anume: ";
-		for (int i = 0; i < t.getNrMateriale(); i++) monitor << t.getMaterial(i) << ", ";
+ostream& operator<<(ostream& monitor, const Tigaie& t) {
+	monitor << "Tigaia cu id-ul " << t.nrInventar << ", produsa de " << t.producator << ", are " << t.greutate << " kg.";
+	if (t.nrMateriale != 0) {
+		monitor << "Aceasta este fabricata din " << t.nrMateriale << " materiale, si anume: ";
+		for (int i = 0; i < t.nrMateriale; i++) monitor << t.material[i] << ", ";
 		monitor << ".";
 	}
-	if (t.getEsteCeramica() == true) {
+	if (t.esteCeramica == true) {
 		monitor << " Tigaia este din ceramica.";
 	}
 	else {
@@ -259,7 +267,7 @@ ifstream& operator>>(ifstream& fisier, Tigaie& t) {;
 
 int Tigaie::nrGenerator = 1000;
 
-class Cuptor {
+class Cuptor : public Produs {
 private:
 	static int nrGenerator;
 	const int nrCuptor;
@@ -339,7 +347,7 @@ public:
 		}
 	}
 
-	Cuptor(const Cuptor& c) : nrCuptor(nrGenerator++) {
+	Cuptor(const Cuptor& c) : Produs(), nrCuptor(nrGenerator++) {
 		this->producator = c.producator;
 		this->culoare = c.culoare;
 		this->esteSmart = c.esteSmart;
@@ -356,7 +364,7 @@ public:
 		}
 	}
 
-	Cuptor() : nrCuptor(nrGenerator++) {
+	Cuptor() : Produs(), nrCuptor(nrGenerator++) {
 		this->producator = "Electrolux";
 		this->culoare = "argintiu";
 		this->esteSmart = false;
@@ -364,7 +372,7 @@ public:
 		this->numeProgram = NULL;
 	}
 
-	Cuptor(string producator, string culoare) : nrCuptor(nrGenerator++) {
+	Cuptor(string producator, string culoare) : Produs(), nrCuptor(nrGenerator++) {
 		this->producator = producator;
 		this->culoare = culoare;
 		this->esteSmart = false;
@@ -372,7 +380,7 @@ public:
 		this->numeProgram = NULL;
 	}
 
-	Cuptor(string producator, string culoare, bool esteSmart, int nrPrograme, string* numeProgram) : nrCuptor(nrGenerator++) {
+	Cuptor(string producator, string culoare, bool esteSmart, int nrPrograme, string* numeProgram) : Produs(), nrCuptor(nrGenerator++) {
 		this->producator = producator;
 		this->culoare = culoare;
 		this->esteSmart = esteSmart;
@@ -394,8 +402,13 @@ public:
 		cout << endl;
 	}
 
+	void descrieProdus() {
+		cout << "Cuptorul este produs de " << this->producator << " si este culoarea " << this->culoare << "." << endl;
+	}
+
 	Cuptor operator=(const Cuptor& c) {
 		if (this != &c) {
+			Produs::operator=(c);
 			this->producator = c.producator;
 			this->culoare = c.culoare;
 			this->esteSmart = c.esteSmart;
@@ -865,6 +878,33 @@ istream& operator>>(istream& tastatura, AirFryer& a) {
 	return tastatura;
 }
 
+class Comanda {
+	int nrProduse;
+	Produs** produse;
+public:
+	Comanda() {
+		this->nrProduse = 3;
+		this->produse = new Produs*[3];
+		for (int i = 0; i < 3; i++) {
+			this->produse[i] = new Tigaie();
+		}
+	}
+
+	Comanda(int nrProduse) {
+		this->nrProduse = nrProduse;
+		this->produse = new Produs * [nrProduse];
+		for (int i = 0; i < nrProduse; i++) {
+			this->produse[i] = new Tigaie();
+		}
+	}
+
+	Produs*& operator[](int i) {
+		if (i >= 0 && i < this->nrProduse) {
+			return this->produse[i];
+		}
+	}
+};
+
 
 void main()
 {
@@ -1010,26 +1050,45 @@ void main()
 	//	cout << vectorSet[i] << endl;
 	//}
 
-//SetTacamuri set;
-//cout << set;
-//fstream fisier("fisier.bin", ios::out | ios::binary);
-//set.scrieInFisierBinar(fisier);
-//
-//SetTacamuri set1("aur");
-//cout << set1;
-//fstream citeste("fisier.bin", ios::in | ios::binary);
-//set1.citesteDinFisierBinar(citeste);
-//cout << set1;
+	//SetTacamuri set;
+	//cout << set;
+	//fstream fisier("fisier.bin", ios::out | ios::binary);
+	//set.scrieInFisierBinar(fisier);
+	//
+	//SetTacamuri set1("aur");
+	//cout << set1;
+	//fstream citeste("fisier.bin", ios::in | ios::binary);
+	//set1.citesteDinFisierBinar(citeste);
+	//cout << set1;
 
-Wok wok;
-cout << wok;
-cin >> wok;
-cout << wok;
+	//Wok wok;
+	//cout << wok;
+	//cin >> wok;
+	//cout << wok;
+	//
+	//AirFryer airf;
+	//cout << airf;
+	//cin >> airf;
+	//cout << airf;
 
-AirFryer airf;
-cout << airf;
-cin >> airf;
-cout << airf;
+Comanda c(10);
+c[0] = new Cuptor();
+c[1] = new Tigaie("Producator", 2);
+c[2] = new Tigaie();
+c[3] = new Cuptor("Alt producator", "alb");
+c[4] = new Cuptor();
+c[5] = new Cuptor("Necunoscut", "auriu");
+c[6] = new Tigaie();
+c[7] = new Tigaie();
+c[8] = new Cuptor();
+c[9] = new Tigaie("Producator", 2);
+
+for (int i = 0; i < 10; i++) {
+	c[i]->descrieProdus();
+	cout << endl;
+}
+
+
 
 	
 }

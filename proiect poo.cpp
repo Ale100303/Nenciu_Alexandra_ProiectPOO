@@ -22,6 +22,24 @@ public:
 	}
 };
 
+class Categorie {
+	string descriere;
+public:
+	virtual void descrieCategorie() = 0;
+
+	Categorie() {
+		this->descriere = "Descriere categorie";
+	}
+
+	string getDescriere() {
+		return descriere;
+	}
+
+	void setDescriere(string descriere) {
+		this->descriere = descriere;
+	}
+};
+
 
 
 class Tigaie :public Produs{
@@ -679,14 +697,14 @@ void acelasiProducator(Cuptor& cuptor, Tigaie& tigaie) {
 
 int SetTacamuri::nrGenerator = 3000;
 
-class Bucatarie {
+class Bucatarie : public Categorie {
 private:
 	float suprafata;
 	float pret;
 	Cuptor cuptor;
 
 public:
-	Bucatarie() : suprafata(100), pret(1599.99), cuptor() {
+	Bucatarie() : Categorie(), suprafata(100), pret(1599.99), cuptor() {
 	}
 
 	float getSuprafata() {
@@ -720,7 +738,13 @@ public:
 	friend ofstream& operator<<(ofstream& fisier, Bucatarie& b);
 	friend ifstream& operator>>(ifstream& fisier, Bucatarie& b);
 
+	void descrieCategorie() {
+		cout << "Categoria este: BUCATARIE."<<endl<<"Bucataria are suprafata de "<<this->suprafata<<" m si costa "<<this->pret<<" lei, avand cuptorul cu urmatoarele informatii: "<<endl;
+		cout << this->cuptor;
+	}
+
 	Bucatarie operator=(Bucatarie& b) {
+		Categorie::operator=(b);
 		this->suprafata = b.suprafata;
 		this->pret = b.pret;
 		this->cuptor = b.cuptor;
@@ -1070,7 +1094,7 @@ void main()
 	//cout << airf;
 	//cin >> airf;
 	//cout << airf;
-
+ //late binding:
 Comanda c(10);
 c[0] = new Cuptor();
 c[1] = new Tigaie("Producator", 2);
@@ -1079,16 +1103,16 @@ c[3] = new Cuptor("Alt producator", "alb");
 c[4] = new Cuptor();
 c[5] = new Cuptor("Necunoscut", "auriu");
 c[6] = new Tigaie();
-c[7] = new Tigaie();
+c[7] = new Wok();
 c[8] = new Cuptor();
-c[9] = new Tigaie("Producator", 2);
+c[9] = new AirFryer();
 
 for (int i = 0; i < 10; i++) {
 	c[i]->descrieProdus();
 	cout << endl;
 }
+//early binding:
+Bucatarie bucatarieCat;
+bucatarieCat.descrieCategorie();
 
-
-
-	
 }
